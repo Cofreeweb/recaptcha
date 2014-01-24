@@ -84,7 +84,7 @@ class RecaptchaComponent extends Component {
 		$this->_defaults['modelClass'] = $this->Controller->modelClass;
 		$this->settings = array_merge($this->_defaults, $settings);
 		$this->actions = array_merge($this->actions, $this->settings['actions']);
-		
+
 		unset($this->settings['actions']);
 	}
 
@@ -100,7 +100,6 @@ class RecaptchaComponent extends Component {
 		}
 		$this->privateKey = Configure::read('Recaptcha.privateKey');
 		$this->Controller = $controller;
-
 		if (!isset($this->Controller->helpers['Recaptcha.Recaptcha'])) {
 			$this->Controller->helpers[] = 'Recaptcha.Recaptcha';
 		}
@@ -108,8 +107,8 @@ class RecaptchaComponent extends Component {
 		if (empty($this->privateKey)) {
 			throw new Exception(__d('recaptcha', "You must set your private recaptcha key using Configure::write('Recaptcha.privateKey', 'your-key');!", true));
 		}
-		
-		$this->Controller->{$this->Controller->modelClass}->validator()->add( 'recaptcha', array(
+
+		$this->Controller->{$this->settings ['modelClass']}->validator()->add( 'recaptcha', array(
 		    'rule' => array( 'equalTo', 1),
 		    'message'=> __d( 'recaptcha', 'Por favor, escribe el código correctamente')
 		));
@@ -129,16 +128,20 @@ class RecaptchaComponent extends Component {
 
 		$this->Controller->{$modelClass}->recaptcha = true;
 		
-		if( $this->verify())
+    if( $this->verify())
     {
-      $this->Controller->request->data [$this->Controller->{$modelClass}->alias]['recaptcha'] = 1;
+      if( !empty( $this->Controller->request->data))
+      {
+        $this->Controller->request->data [$this->Controller->{$modelClass}->alias]['recaptcha'] = 1;
+      }
     }
     else
     {
       $this->Controller->request->data [$this->Controller->{$modelClass}->alias]['recaptcha'] = 0;
     }
-		
+    
 		if (in_array($this->Controller->action, $this->actions)) {
+		  
 			if (!$this->verify()) {
 				$this->Controller->{$modelClass}->recaptcha = false;
 				$this->Controller->{$modelClass}->recaptchaError = $this->error;

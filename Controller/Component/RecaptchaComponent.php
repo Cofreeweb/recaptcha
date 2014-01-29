@@ -67,7 +67,7 @@ class RecaptchaComponent extends Component {
  *
  * @var array
  */
-        protected $_defaults = array(
+  protected $_defaults = array(
 		'errorField' => 'recaptcha',
 		'actions' => array()
         );
@@ -130,7 +130,7 @@ class RecaptchaComponent extends Component {
 		
     if( $this->verify())
     {
-      if( !empty( $this->Controller->request->data))
+      if( !empty( $this->Controller->request->data) && (!isset( $this->Controller->Auth) || !$this->Controller->Auth->user()))
       {
         $this->Controller->request->data [$this->Controller->{$modelClass}->alias]['recaptcha'] = 1;
       }

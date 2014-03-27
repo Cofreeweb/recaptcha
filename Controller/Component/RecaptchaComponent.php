@@ -110,7 +110,7 @@ class RecaptchaComponent extends Component {
 
 		$this->Controller->{$this->settings ['modelClass']}->validator()->add( 'recaptcha', array(
 		    'rule' => array( 'equalTo', 1),
-		    'message'=> __d( 'recaptcha', 'Por favor, escribe el código correctamente')
+		    'message'=> __( 'Por favor, escribe el código correctamente')
 		));
 	}
 
